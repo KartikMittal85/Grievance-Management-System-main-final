@@ -1,0 +1,464 @@
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Dashboard - VoiceUp</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --brand-start: #6a11cb;
+      --brand-end:   #2575fc;
+      --card-bg: #ffffff;
+      --muted: #6b6b6b;
+      --footer-h: 78px;
+    }
+
+    body{
+      background: linear-gradient(160deg,var(--brand-start),var(--brand-end));
+      padding-bottom: calc(var(--footer-h) + 40px);
+      font-family: "Poppins", sans-serif;
+    }
+
+    /* NAV */
+    .navbar{
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(6px);
+      padding: 0.6rem 1rem;
+    }
+
+    .nav-btn{
+      background: #fff;
+      color: var(--brand-start);
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-weight: 600;
+      margin-left: 8px;
+      text-decoration: none;
+      border: none;
+    }
+
+    .nav-btn:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(37,117,252,0.18);
+    }
+
+    /* layout */
+    .dashboard-container{
+      max-width: 980px;
+      margin: 34px auto;
+      padding-bottom: 60px;
+    }
+
+    /* Cards */
+    .card{
+      border-radius: 14px;
+      border: none;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
+
+    .card-header{
+      background: linear-gradient(120deg,var(--brand-start),var(--brand-end));
+      color: #fff;
+      font-weight: 700;
+      padding: 14px 18px;
+    }
+
+    /* Footer */
+    #revealFooter{
+      position: fixed;
+      left:0; right:0;
+      height: var(--footer-h);
+      bottom: -150px;
+      background: linear-gradient(120deg,var(--brand-start),var(--brand-end));
+      color: #fff;
+      display:flex; align-items:center; justify-content:center;
+      transition: .4s ease;
+    }
+
+    #revealFooter.visible{ bottom:0; }
+
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark px-4">
+  <a class="navbar-brand text-white"><i class="bi bi-mortarboard"></i> VoiceUp</a>
+  <div class="ms-auto d-flex">
+
+    <!-- NEW My Issues button -->
+    <!--<a href="{{ url_for('my_issues') }}" class="nav-btn">My Issues</a>
+
+    <!--<a href="{{ url_for('about') }}" class="nav-btn">About</a>
+    <a href="{{ url_for('home') }}" class="nav-btn">Home</a>-->
+
+    <!-- FIXED FEEDBACK BUTTON -->
+    <!--<button class="nav-btn" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+      <i class="bi bi-chat-left-text"></i> Feedback
+    </button>
+
+    <a href="{{ url_for('logout') }}" class="nav-btn">Logout</a>
+  </div>
+</nav>
+
+<div class="dashboard-container">
+
+  <!-- Submit Grievance -->
+  <!--<div class="card mb-4">
+    <div class="card-header">Submit a Grievance</div>
+    <div class="card-body">
+
+      <form method="POST" id="grievanceForm">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Title</label>
+            <input name="title" class="form-control" required />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Department</label>
+            <select name="department" class="form-select" required>
+              <option value="">Select Department</option>
+              <option>B.Tech</option>
+              <option>BCA</option>
+              <option>MBA</option>
+              <option>Forensic</option>
+              <option>Pharmacy</option>
+              <option>Sports</option>
+              <option>Others</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Category</label>
+            <select name="category" class="form-select" required>
+              <option>Academic</option>
+              <option>Hostel</option>
+              <option>Examination</option>
+              <option>Library</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Tags</label>
+            <input class="form-control" placeholder="optional tags" />
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="3" required></textarea>
+          </div>
+
+          <div class="col-12 d-grid">
+            <button class="btn btn-primary">Submit</button>
+          </div>
+
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<!--<footer id="revealFooter">
+  © 2025 VoiceUp • Secure • Simple
+</footer>
+
+<!-- FEEDBACK MODAL -->
+<!--<div class="modal fade" id="feedbackModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <form id="feedbackForm">
+        <div class="modal-header">
+          <h5 class="modal-title">Submit Feedback</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <input type="text" class="form-control mb-2" name="name" value="{{ current_user.username }}" required>
+          <input type="email" class="form-control mb-2" name="email" required>
+          <textarea rows="4" class="form-control" name="message" required></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-primary">Send</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Footer reveal
+  function updateFooter() {
+    let bottom = $(window).scrollTop() + $(window).height();
+    let docHeight = $(document).height();
+    if (docHeight - bottom < 80) $("#revealFooter").addClass("visible");
+    else $("#revealFooter").removeClass("visible");
+  }
+
+  $(window).on("scroll", updateFooter);
+</script>
+
+</body>
+</html>-->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Dashboard - VoiceUp</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --brand-start: #6a11cb;
+      --brand-end:   #2575fc;
+      --card-bg: #ffffff;
+      --muted: #6b6b6b;
+      --footer-h: 78px;
+    }
+
+    body{
+      background: linear-gradient(160deg,var(--brand-start),var(--brand-end));
+      padding-bottom: calc(var(--footer-h) + 40px);
+      font-family: "Poppins", sans-serif;
+    }
+
+    /* NAV */
+    .navbar{
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(6px);
+      padding: 0.6rem 1rem;
+    }
+
+    .nav-btn{
+      background: #fff;
+      color: var(--brand-start);
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-weight: 600;
+      margin-left: 8px;
+      text-decoration: none;
+      border: none;
+    }
+
+    .nav-btn:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(37,117,252,0.18);
+    }
+
+    /* layout */
+    .dashboard-container{
+      max-width: 980px;
+      margin: 34px auto;
+      padding-bottom: 60px;
+    }
+
+    /* Cards */
+    .card{
+      border-radius: 14px;
+      border: none;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
+
+    .card-header{
+      background: linear-gradient(120deg,var(--brand-start),var(--brand-end));
+      color: #fff;
+      font-weight: 700;
+      padding: 14px 18px;
+    }
+
+    /* Footer */
+    #revealFooter{
+      position: fixed;
+      left:0; right:0;
+      height: var(--footer-h);
+      bottom: -150px;
+      background: linear-gradient(120deg,var(--brand-start),var(--brand-end));
+      color: #fff;
+      display:flex; align-items:center; justify-content:center;
+      transition: .4s ease;
+    }
+
+    #revealFooter.visible{ bottom:0; }
+
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark px-4">
+  <a class="navbar-brand text-white"><i class="bi bi-mortarboard"></i> VoiceUp</a>
+  <div class="ms-auto d-flex">
+
+    <!-- NEW My Issues button -->
+    <a href="{{ url_for('my_issues') }}" class="nav-btn">My Issues</a>
+
+    <!-- FIXED FEEDBACK BUTTON -->
+    <button class="nav-btn" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+      <i class="bi bi-chat-left-text"></i> Feedback
+    </button>
+
+    <a href="{{ url_for('logout') }}" class="nav-btn">Logout</a>
+  </div>
+</nav>
+
+<div class="dashboard-container">
+
+  <!-- Submit Grievance -->
+  <div class="card mb-4">
+    <div class="card-header">Submit a Grievance</div>
+    <div class="card-body">
+
+      <form method="POST" id="grievanceForm">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Title</label>
+            <input name="title" class="form-control" required />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Department</label>
+            <select name="department" class="form-select" required>
+              <option value="">Select Department</option>
+              <option>B.Tech</option>
+              <option>BCA</option>
+              <option>MBA</option>
+              <option>Forensic</option>
+              <option>Pharmacy</option>
+              <option>Sports</option>
+              <option>Others</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Category</label>
+            <select name="category" class="form-select" required>
+              <option>Academic</option>
+              <option>Hostel</option>
+              <option>Examination</option>
+              <option>Library</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Tags</label>
+            <input class="form-control" placeholder="optional tags" />
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="3" required></textarea>
+          </div>
+
+          <div class="col-12 d-grid">
+            <button class="btn btn-primary">Submit</button>
+          </div>
+
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="revealFooter">
+  © 2025 VoiceUp • Secure • Simple
+</footer>
+
+<!-- FEEDBACK MODAL -->
+<div class="modal fade" id="feedbackModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- IMPORTANT: set action to the feedback route and method=post -->
+      <form id="feedbackForm" action="{{ url_for('feedback') }}" method="post">
+        <div class="modal-header">
+          <h5 class="modal-title">Submit Feedback</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <!-- prefill name/email from current_user where available -->
+          <input type="text" class="form-control mb-2" name="name" value="{{ current_user.username or '' }}" required>
+          <input type="email" class="form-control mb-2" name="email" value="{{ current_user.email or '' }}" required>
+          <textarea rows="4" class="form-control" name="message" required></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+          <!-- ensure button has type=submit so it submits the form to /feedback -->
+          <button class="btn btn-primary" type="submit">Send</button>
+        </div>
+      </form>
+
+      <!-- Optional: an AJAX submit variant (keeps modal open, shows success message) -->
+      <!--
+      If you prefer AJAX, remove action/method above and uncomment the JS below.
+      The server's /feedback endpoint already returns JSON for AJAX (201).
+      -->
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Footer reveal
+  function updateFooter() {
+    let bottom = $(window).scrollTop() + $(window).height();
+    let docHeight = $(document).height();
+    if (docHeight - bottom < 80) $("#revealFooter").addClass("visible");
+    else $("#revealFooter").removeClass("visible");
+  }
+  $(window).on("scroll resize load", updateFooter);
+
+  // Optional AJAX submit example: keeps modal open and shows success without page reload.
+  // If you want this behavior, comment out action/method in the form above and
+  // uncomment this block. The server supports JSON responses.
+  /*
+  $('#feedbackForm').on('submit', function(e){
+    e.preventDefault();
+    const $form = $(this);
+    const data = $form.serialize();
+    $.ajax({
+      url: $form.attr('action') || '/feedback',
+      method: 'POST',
+      data: data,
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    }).done(function(resp){
+      // success - show a simple confirmation and close modal
+      alert('Feedback sent — thanks!');
+      $('#feedbackModal').modal('hide');
+      $form.find('textarea[name="message"]').val('');
+    }).fail(function(xhr){
+      alert('Failed to send feedback. Please try again.');
+    });
+  });
+  */
+</script>
+
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>About — VoiceUp Grievance Management</title>
+
+  <!-- Fonts: Rubik (headings) + Inter (body) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Rubik:wght@500;700&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --brand-start: #6a11cb;
+      --brand-end:   #2575fc;
+      --muted: #6b6b6b;
+      --card-bg: #ffffff;
+      --page-pad: 34px;
+      --footer-height: 78px;
+
+      --font-heading: "Rubik", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    /* Global */
+    html,body { height:100%; }
+    body{
+      margin:0;
+      font-family: var(--font-body);
+      background: linear-gradient(160deg,var(--brand-start),var(--brand-end));
+      min-height:100vh;
+      color:#0f1724;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding-bottom: calc(var(--footer-height) + 32px);
+    }
+
+    /* NAV */
+    .navbar{
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 8px 30px rgba(12,12,20,0.12);
+      padding: 0.6rem 1rem;
+    }
+    .navbar-brand{ 
+      color: #fff; 
+      font-weight:700; 
+      font-size:1.25rem;
+      font-family: var(--font-heading);
+      letter-spacing: 0.2px;
+    }
+    .nav-btn {
+      border-radius:24px; 
+      font-weight:600;
+      font-family: var(--font-body);
+      padding: 8px 20px;
+    }
+
+    /* page wrapper */
+    .page-wrap{
+      max-width: 980px;
+      margin: var(--page-pad) auto;
+      padding: 22px;
+      padding-bottom: 80px;
+    }
+
+    /* hero */
+    .hero {
+      background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border-radius: 14px;
+      padding: 30px 26px;
+      color: #fff;
+      box-shadow: 0 20px 50px rgba(6,6,20,0.16);
+      margin-bottom: 18px;
+      overflow: hidden;
+      transform: translateY(6px);
+      animation: fadeUp 600ms cubic-bezier(.2,.9,.2,1) 0.06s both;
+    }
+
+    .hero h1{
+      font-size:1.55rem;
+      margin:0 0 6px 0;
+      font-family: var(--font-heading);
+      letter-spacing: 0.2px;
+      font-weight:700;
+    }
+    .hero p { 
+      color: rgba(255,255,255,0.95); 
+      margin:0;
+      font-size:0.98rem;
+      opacity:0.95;
+    }
+
+    /* cards */
+    .card {
+      border-radius:12px;
+      background: var(--card-bg);
+      box-shadow: 0 14px 40px rgba(3,8,30,0.08);
+      margin-bottom:18px;
+      overflow:hidden;
+      transition: transform .28s ease, box-shadow .28s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(3,8,30,0.12);
+    }
+
+    .card-body h5 { 
+      color:#2b165f; 
+      font-weight:700; 
+      font-family: var(--font-heading);
+      margin-bottom:8px;
+    }
+    .muted { color: var(--muted); font-size:0.95rem; }
+
+    /* feature grid */
+    .feature-grid { 
+      display:grid; 
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); 
+      gap:14px; 
+      margin-top:8px;
+    }
+
+    .feature-grid > div {
+      padding:14px;
+      border-radius:10px;
+      background: linear-gradient(180deg, rgba(106,17,203,0.03), rgba(37,117,252,0.02));
+      min-height:80px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      transition: transform .28s ease;
+      animation: fadeUp 550ms cubic-bezier(.2,.9,.2,1) both;
+    }
+    .feature-grid > div:hover { transform: translateY(-6px); }
+
+    .feature-grid strong { color:var(--brand-end); font-family: var(--font-heading); }
+    .feature-grid p { margin:0; color:var(--muted); font-size:0.88rem; }
+
+    /* tech list */
+    .tech-list li { margin-bottom:6px; color:var(--muted); }
+
+    /* workflow */
+    .workflow-step { display:flex; gap:14px; align-items:flex-start; margin-bottom:14px; }
+    .step-num {
+      width:44px; height:44px; border-radius:10px;
+      background: linear-gradient(90deg,var(--brand-start),var(--brand-end));
+      color:#fff; display:flex; align-items:center; justify-content:center;
+      font-weight:700; font-family: var(--font-heading);
+      box-shadow: 0 8px 20px rgba(6,6,30,0.18);
+      transform: translateY(-6px);
+      animation: pop 420ms cubic-bezier(.2,.9,.2,1) both;
+    }
+    .workflow-step strong { font-family: var(--font-heading); color: #111827; display:block; margin-bottom:4px; }
+    .workflow-step .muted { margin:0; font-size:0.92rem; }
+
+    /* footer (reveal) */
+    #revealFooter {
+        position: fixed;
+        bottom: -120px;
+        left: 0;
+        right: 0;
+        height: var(--footer-height);
+        background: linear-gradient(120deg, var(--brand-start), var(--brand-end));
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 -8px 30px rgba(0,0,0,0.2);
+        transition: bottom 0.36s cubic-bezier(.2,.9,.2,1);
+        z-index: 999;
+    }
+    #revealFooter.visible { bottom: 0; }
+    .footer-inner { display: flex; align-items: center; gap: 18px; font-weight: 600; font-family: var(--font-body); }
+    .footer-inner i { font-size: 20px; opacity: 0.95; transition: transform .22s ease; }
+    .footer-inner i:hover { transform: scale(1.12); }
+
+    /* small screens */
+    @media (max-width:880px){
+      .page-wrap{ padding:16px; }
+      .hero { padding:22px; }
+      .feature-grid { gap:10px; }
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(10px); }
+      to { opacity:1; transform: translateY(0); }
+    }
+    @keyframes pop {
+      0% { transform: scale(.92) translateY(6px); opacity:0; }
+      60% { transform: scale(1.03) translateY(-6px); opacity:1; }
+      100% { transform: scale(1) translateY(0); }
+    }
+
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark px-4">
+    <a class="navbar-brand"><i class="bi bi-mortarboard"></i> VoiceUp</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item me-2">
+          <a class="btn btn-light nav-btn" href="{{ url_for('home') }}"><i class="bi bi-house"></i> Home</a>
+        </li>
+        <li class="nav-item me-2">
+          <!-- ABOUT button (current page) -->
+          <a class="btn btn-outline-light nav-btn" href="{{ url_for('about') }}"><i class="bi bi-info-circle"></i> About</a>
+        </li>
+        <li class="nav-item me-2">
+          <a class="btn btn-light nav-btn" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="page-wrap">
+    <section class="hero">
+      <h1>About VoiceUp — Grievance Management System</h1>
+      <p>
+        VoiceUp is an intuitive, secure platform built to collect, track and resolve student grievances
+        efficiently. It brings transparency to the grievance redressal workflow by providing students,
+        admins and VIP staff a single, auditable place to raise and manage issues.
+      </p>
+    </section>
+
+    <section class="card p-4">
+      <div class="card-body">
+        <h5>Project Overview</h5>
+        <p class="muted">
+          VoiceUp allows students to submit grievances (academic, hostel, examination, library, etc.)
+          and enables administrators to triage, update, and resolve them. Each grievance has a status
+          and optional remarks from admins. The system also supports feedback submission and basic analytics.
+        </p>
+      </div>
+    </section>
+
+    <section class="card p-4">
+      <div class="card-body">
+        <h5>Key Features</h5>
+        <div class="feature-grid mt-3">
+          <div>
+            <strong>Submit Grievance</strong>
+            <p class="muted small">Students can submit details and attachments; timestamped and stored.</p>
+          </div>
+          <div>
+            <strong>Admin Management</strong>
+            <p class="muted small">Admins can view, update status, add remarks, and resolve or reject grievances.</p>
+          </div>
+          <div>
+            <strong>VIP Panel</strong>
+            <p class="muted small">VIP users get a themed panel for priority handling and quick views.</p>
+          </div>
+          <div>
+            <strong>Feedback Module</strong>
+            <p class="muted small">Students provide UI feedback; admins can review responses.</p>
+          </div>
+          <div>
+            <strong>Audit Trail</strong>
+            <p class="muted small">Status updates are saved with admin remarks for traceability.</p>
+          </div>
+          <div>
+            <strong>Responsive UI</strong>
+            <p class="muted small">Built with Bootstrap for mobile-friendly interaction.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card p-4">
+      <div class="card-body">
+        <h5>Tech Stack</h5>
+        <ul class="tech-list muted">
+          <li><strong>Backend:</strong> Flask (Python), SQLAlchemy </li>
+          <li><strong>Frontend:</strong> HTML, Bootstrap, jQuery, Jinja templates</li>
+          <li><strong>Database:</strong> SQLite </li>
+          <li><strong>Auth:</strong> Flask-Login + password hashing (werkzeug.security)</li>
+          <li><strong>Hosting (optional):</strong> Heroku / PythonAnywhere / VPS</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card p-4">
+      <div class="card-body">
+        <h5>How It Works — Workflow</h5>
+
+        <div class="mt-3">
+          <div class="workflow-step mb-3">
+            <div class="step-num">1</div>
+            <div>
+              <strong>Student registers / logs in.</strong>
+              <div class="muted small">Student provides credentials and lands on the dashboard.</div>
+            </div>
+          </div>
+
+          <div class="workflow-step mb-3">
+            <div class="step-num">2</div>
+            <div>
+              <strong>Student submits a grievance.</strong>
+              <div class="muted small">Title, category, description and optional tags are stored with a default status.</div>
+            </div>
+          </div>
+
+          <div class="workflow-step mb-3">
+            <div class="step-num">3</div>
+            <div>
+              <strong>Admin reviews and updates status.</strong>
+              <div class="muted small">Admin changes status (Seen → In Progress → Resolved / Rejected) and adds remarks.</div>
+            </div>
+          </div>
+
+          <div class="workflow-step mb-3">
+            <div class="step-num">4</div>
+            <div>
+              <strong>Student views updates and feedback.</strong>
+              <div class="muted small">Student can view remarks, final decision, and provide feedback.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="card p-4">
+      <div class="card-body">
+        <h5>How to use the About page</h5>
+        <p class="muted">Use the navigation “About” button to reach this page. It’s fully responsive and uses the same brand colors as the site for a consistent look.</p>
+      </div>
+    </section>
+
+   <!-- Footer (matches student dashboard) -->
+<footer id="revealFooter">
+    <div class="footer-inner">
+        <i class="bi bi-shield-lock-fill"></i>
+        <span>© 2025 VoiceUp Grievance Management System</span>
+        <i class="bi bi-chat-dots-fill"></i>
+    </div>
+</footer>
+
+  </main>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Footer Reveal Script -->
+<script>
+    window.addEventListener("scroll", () => {
+        const footer = document.getElementById("revealFooter");
+        const scrollBottom = window.innerHeight + window.scrollY;
+        const pageHeight = document.documentElement.scrollHeight;
+
+        if (scrollBottom >= pageHeight - 20) {
+            footer.classList.add("visible");
+        } else {
+            footer.classList.remove("visible");
+        }
+    });
+</script>
+
+</body>
+</html>
+

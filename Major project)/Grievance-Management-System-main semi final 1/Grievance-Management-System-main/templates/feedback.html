@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback</title>
+    <style>
+        body{
+            font-family: "Poppins", sans-serif;
+            background: #eef2ff;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .feedback-box{
+            background: white;
+            width: 500px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        input, textarea{
+            width: 90%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button{
+            background: #4c57ff;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .back-btn{
+            margin-top: 15px;
+            display: inline-block;
+            text-decoration: none;
+            color: #4c57ff;
+            font-weight: bold;
+        }
+
+        .error{
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="feedback-container">
+        <h2>Feedback Form</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div style="color: {% if category == 'success' %}green{% else %}red{% endif %}; text-align:center;">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <form method="POST">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" rows="5" placeholder="Your Feedback" required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+        {% if current_user.is_authenticated and current_user.role == 'student' %}
+        <a href="{{ url_for('student_dashboard') }}"><button>Back to Dashboard</button></a>
+        {% endif %}
+    </div>
+</body>
+</html>

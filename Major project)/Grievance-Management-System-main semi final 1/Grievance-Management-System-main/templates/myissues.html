@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>My Issues — VoiceUp</title>
+
+  <!-- Bootstrap + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --brand-start: #6a11cb;
+      --brand-end:   #2575fc;
+      --muted: #6b6b6b;
+      --card-bg: #ffffff;
+      --footer-h: 78px;
+    }
+
+    html,body { height:100%; }
+    body{
+      margin:0;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(160deg,var(--brand-start),var(--brand-end));
+      color:#0b1220;
+    }
+
+    /* NAV */
+    .navbar {
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+      padding: 0.7rem 1rem;
+    }
+    .navbar .navbar-brand { color:#fff; font-weight:700; font-size:1.15rem; }
+    .btn-back {
+      background: #fff;
+      color: var(--brand-start);
+      font-weight:600;
+      border-radius:28px;
+      padding:6px 14px;
+      box-shadow: 0 8px 20px rgba(37,117,252,0.06);
+      border: none;
+    }
+    .btn-back:hover { transform: translateY(-3px); }
+
+    /* MAIN WRAPPER WITH EXTRA SPACE FOR FOOTER */
+    .wrap { 
+      max-width:1100px; 
+      margin: 34px auto; 
+      padding: 0 16px 160px; /* EXTRA SPACE ADDED FOR FOOTER (IMPORTANT) */
+    }
+
+    h1.page-title {
+      color: #fff;
+      font-size:1.25rem;
+      margin-bottom:10px;
+      display:flex; align-items:center; gap:10px;
+      font-weight:700;
+    }
+
+    .controls { display:flex; gap:12px; align-items:center; margin-bottom:16px; flex-wrap:wrap; }
+    .search { flex:1 1 320px; max-width:560px; }
+    .filter-pill {
+      background: rgba(255,255,255,0.95);
+      border-radius:999px;
+      padding:6px 12px;
+      font-weight:600;
+      color:var(--brand-start);
+    }
+
+    .panel {
+      background: rgba(255,255,255,0.97);
+      border-radius:14px;
+      padding:14px;
+      box-shadow: 0 18px 40px rgba(6,6,30,0.08);
+      overflow:hidden;
+    }
+
+    thead th {
+      background: linear-gradient(90deg, rgba(106,17,203,0.06), rgba(37,117,252,0.04));
+      color: var(--brand-start);
+      font-weight:700;
+      text-align:center;
+      padding:10px 8px;
+      font-size:0.88rem;
+    }
+
+    tbody tr {
+      background: #fff;
+      border-radius:12px;
+      box-shadow: 0 8px 20px rgba(12,12,30,0.04);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    tbody tr:hover { 
+      transform: translateY(-6px); 
+      box-shadow: 0 20px 44px rgba(12,12,30,0.08); 
+    }
+
+    tbody td {
+      padding:12px 10px;
+      text-align:center;
+      font-size:0.92rem;
+    }
+
+    /* Footer Reveal */
+    #revealFooter {
+      position: fixed;
+      left:0; right:0;
+      height: var(--footer-h);
+      bottom: -120px;
+      display:flex; align-items:center; justify-content:center;
+      background: linear-gradient(120deg,var(--brand-start),var(--brand-end));
+      color:white;
+      transition: bottom 360ms cubic-bezier(.2,.9,.2,1);
+      box-shadow: 0 -12px 40px rgba(6,6,30,0.12);
+      z-index: 60;
+    }
+    #revealFooter.visible { bottom: 0; }
+
+    .footer-inner { 
+      display:flex; 
+      gap:18px; 
+      font-weight:600; 
+      font-size:0.95rem;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand"><i class="bi bi-mortarboard-fill"></i> VoiceUp</a>
+
+      <div class="ms-auto">
+        {% if current_user.role == 'student' %}
+          <a href="{{ url_for('student_dashboard') }}" class="btn btn-back me-2">Back</a>
+        {% elif current_user.role == 'vip' %}
+          <a href="{{ url_for('vip_dashboard') }}" class="btn btn-back me-2">Back</a>
+        {% elif current_user.role == 'admin' %}
+          <a href="{{ url_for('admin_dashboard') }}" class="btn btn-back me-2">Back</a>
+        {% else %}
+          <a href="{{ url_for('home') }}" class="btn btn-back me-2">Back</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <h1 class="page-title"><i class="bi bi-list-check"></i> My Submitted Issues</h1>
+
+    <div class="controls">
+      <input id="searchInput" class="form-control search" placeholder="Search by title, category or status..." />
+      <div class="filter-pill">Total: <strong id="countBadge">{{ grievances|length }}</strong></div>
+      <button id="refreshBtn" class="btn btn-light"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+    </div>
+
+    <div class="panel">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Department</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Last Updated</th>
+          </tr>
+        </thead>
+
+        <tbody id="issuesTbody">
+          {% for g in grievances %}
+          <tr>
+            <td>#{{ g.id }}</td>
+            <td>{{ g.title }}</td>
+            <td>{{ g.department }}</td>
+            <td>{{ g.category }}</td>
+            <td>
+              <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#descModal{{ g.id }}">
+                View
+              </button>
+            </td>
+            <td><span class="badge bg-primary">{{ g.status }}</span></td>
+            <td>{{ g.last_updated or g.date_created }}</td>
+          </tr>
+
+          <!-- Modal -->
+          <div class="modal fade" id="descModal{{ g.id }}" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+              <div class="modal-content">
+                <div class="modal-header" style="background:linear-gradient(90deg,var(--brand-start),var(--brand-end)); color:white;">
+                  <h5 class="modal-title">Grievance Details</h5>
+                  <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                  <p><strong>{{ g.title }}</strong></p>
+                  <p>{{ g.description }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+  </main>
+
+  <!-- Sticky Footer Reveal -->
+  <footer id="revealFooter">
+    <div class="footer-inner">
+      <i class="bi bi-shield-lock-fill"></i>
+      © 2025 VoiceUp • Secure • Responsive • Simple
+      <i class="bi bi-chat-dots-fill"></i>
+    </div>
+  </footer>
+
+  <!-- scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Footer Reveal Logic — shows ONLY at bottom
+    (function(){
+      const footer = document.getElementById("revealFooter");
+
+      function checkScroll(){
+        let scrollY = window.scrollY;
+        let viewport = window.innerHeight;
+        let full = document.documentElement.scrollHeight;
+
+        if (scrollY + viewport >= full - 20)
+          footer.classList.add("visible");
+        else
+          footer.classList.remove("visible");
+      }
+
+      window.addEventListener("scroll", checkScroll);
+      window.addEventListener("load", checkScroll);
+      window.addEventListener("resize", checkScroll);
+    })();
+  </script>
+
+</body>
+</html>
